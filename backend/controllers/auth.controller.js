@@ -33,3 +33,11 @@ export async function changepassword(req,res,next){
         next(e)
     }
 }
+export async function me(req,res , next){
+    try{
+        // console.log(req.user)
+        res.json(req.user)
+    }catch(e){
+        next(e)
+    }
+}

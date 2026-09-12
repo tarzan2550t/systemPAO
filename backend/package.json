@@ -19,6 +19,7 @@
     "express-fileupload": "^1.5.2",
     "jsonwebtoken": "^9.0.3",
     "knex": "^3.3.0",
+    "morgan": "^1.12.1",
     "multer": "^2.3.0",
     "mysql2": "^3.24.4"
   },

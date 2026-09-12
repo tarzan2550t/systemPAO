@@ -5,7 +5,7 @@ import router, { redirectByRole } from '../router/index.js'
 import { useAuthStore } from '../stores/auth.js'
 
 const auth = useAuthStore()
-
+const message = ref()
 const form = ref({
   email: '',
   password: ''
@@ -22,27 +22,23 @@ async function handleLogin() {
 
   } catch (e) {
     console.log(e)
+    message.value = e.message
   }
 }
 </script>
 
 <template>
   <div class="flex h-screen w-full items-center justify-center">
-    <div class="bg-white w-xs h-auto p-5 text-black rounded flex flex-col gap-3 items-center shadow-lg">
+    <div class="bg-white w-xs h-auto p-5 text-black rounded flex flex-col gap-3 justify-center items-center shadow-lg">
       <form @submit.prevent="handleLogin">
+        <p>{{ message }}</p>
         <div class="mb-3">
           Login
         </div>
         <!-- email -->
         <fieldset class="fieldset">
           <label class="label" for="email">email</label>
-          <input
-            type="email"
-            v-model="form.email"
-            id="email"
-            placeholder="email"
-            class="input w-70"
-          />
+          <input type="email" v-model="form.email" id="email" placeholder="email" class="input w-70"/>
         </fieldset>
 
         <!-- password -->
@@ -62,11 +58,7 @@ async function handleLogin() {
 
         <p class="text-sm">
           Don't have an account?
-
-          <RouterLink
-            class="link link-success"
-            :to="{ name: 'register' }"
-          >
+          <RouterLink class="link link-success" :to="{ name: 'register' }">
             Register
           </RouterLink>
         </p>

@@ -3,6 +3,7 @@ import { useAuthStore } from "../stores/auth.js";
 import { useRouter } from 'vue-router'
 const router = useRouter()
 const auth = useAuthStore()
+
 function handleLogout(){
     // console.log('ทำงาน')
     auth.logout()

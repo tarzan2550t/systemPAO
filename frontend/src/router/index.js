@@ -2,7 +2,10 @@ import { createRouter, createWebHistory } from 'vue-router'
 import {useAuthStore} from '../stores/auth.js'
 
 const routes = [
-
+  {
+  path: '/',
+  redirect: '/login'
+  },
   {
     path: '/login',
     name: 'login',
@@ -19,7 +22,6 @@ const routes = [
     path:'/first_login',
     name:'first_login',
     component: ()=> import('../views/first_login.vue') , 
-    meta: { guest: true }
   },
   {
     path:'/admin',
@@ -71,18 +73,51 @@ const router = createRouter({
   history: createWebHistory(),
   routes
 })
-router.beforeEach(async (to)=>{
+router.beforeEach(async (to) => {
   const auth = useAuthStore()
-  if (auth.token && !auth.user) await auth.fetchMe()
-  if (to.meta.guest) {
-    if (auth.isLoggedIn) return redirectByRole(auth.user.role)
-    return true
+  // console.log('--- ROUTER ---')
+  // console.log('to:', to.name)
+  // console.log('token:', auth.token)
+  // console.log('user:', auth.user)
+  // console.log('isLoggedIn:', auth.isLoggedIn)
+  // มี token แต่ยังไม่มี user → ดึง user จาก /me
+  if (auth.token && !auth.user) {
+    
+    await auth.fetchMe()
   }
-  if (!auth.isLoggedIn) return { name: 'login' }
-  if (to.meta.role && auth.user?.role !== to.meta.role)
-    return redirectByRole(auth.user.role)
-  return true
+  // console.log('--- ROUTER ---')
+  // console.log('to:', to.name)
+  // console.log('token:', auth.token)
+  // console.log('user:', auth.user)
+  // console.log('isLoggedIn:', auth.isLoggedIn)
 
+  // ยังไม่ได้ login
+
+  if (!auth.isLoggedIn) {
+    if (to.meta.guest) {
+      
+      return true
+    }
+   
+    return { name: 'login' }
+  }
+
+  // Login แล้ว แต่เป็น first login
+  if (auth.frist_login === 'first_login' && to.name !== 'first_login') {
+    return { name: 'first_login' }
+  }
+
+  // Login แล้ว และพยายามเข้าหน้า guest
+  
+  if (to.meta.guest) { return redirectByRole(auth.user.role,auth.frist_login)}
+
+  // ตรวจ role
+  if ( to.meta.role && auth.user?.role !== to.meta.role) {
+    
+    return redirectByRole( auth.user.role, auth.frist_login)
+  }
+
+  return true
 })
 
 

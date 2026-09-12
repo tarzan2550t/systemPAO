@@ -24,10 +24,14 @@ export const useAuthStore = defineStore('auth' , ()=>{
     
     
     async function fetchMe() {
-    if (!token.value) return
+    if (!token.value) return 
         try {
         const res = await api.get('/auth/me')
-        user.value = res
+        // console.log('ทำงาน')
+        // console.log(res)
+        user.value = res.user
+  
+        frist_login.value = res.purpose
         } catch {
         logout()
         }
