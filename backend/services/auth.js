@@ -29,7 +29,9 @@ export async function register(name, email, department) {
 export async function login(email, password) {
 
     const user = await conn('users')
-        .where({ email })
+        .leftJoin('user_role' , "users.role_id" , 'user_role.id')
+        .where({ 'users.email' : email })
+        .select(['users.*' , 'user_role.name as namerole'])
         .first()
 
     if (!user) {
@@ -41,13 +43,10 @@ export async function login(email, password) {
     if (!isMatch) { throw new AppError('Email or password is incorrect', 401) }
 
     const purpose = user.must_change_password ? 'first_login' : 'access'
+    const payload = { user: user.id , name : user.name , role : user.namerole}
+    const token = generateToken( { user: payload, purpose })
 
-    const token = generateToken({
-        user: { id : user.id , role : user.role},
-        purpose
-    })
-
-    return { message: 'Login success', token,purpose}
+    return { message: 'Login success', token , purpose , payload }
 }
 
 export async function changpassword( id ,password){
