@@ -1,3 +1,15 @@
+<script setup>
+import { useAuthStore } from "../stores/auth.js";
+import { useRouter } from 'vue-router'
+const router = useRouter()
+const auth = useAuthStore()
+function handleLogout(){
+    // console.log('ทำงาน')
+    auth.logout()
+    //  console.log('after logout')
+    router.push({name :'login'})
+}
+</script>
 <template>
   <div class="navbar bg-base-100 shadow-sm">
 
@@ -59,7 +71,7 @@
           class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
         >
           <li><a>Profile</a></li>
-          <li><a>Logout</a></li>
+          <li><a @click="handleLogout">Logout</a></li>
         </ul>
 
       </div>
