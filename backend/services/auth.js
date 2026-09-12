@@ -43,8 +43,7 @@ export async function login(email, password) {
     const purpose = user.must_change_password ? 'first_login' : 'access'
 
     const token = generateToken({
-        id: user.id,
-        role: user.role,
+        user: { id : user.id , role : user.role},
         purpose
     })
 
@@ -52,7 +51,7 @@ export async function login(email, password) {
 }
 
 export async function changpassword( id ,password){
-
+    // console.log(id , password)
     const password_hash = await hashpassword(password)
 
     const update = await conn('users').where({id}).update({password_hash , must_change_password : false })

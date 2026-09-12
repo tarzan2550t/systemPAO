@@ -24,8 +24,9 @@ export async function register(req ,res , next) {
 
 export async function changepassword(req,res,next){
     try{
+        // console.log(req.user)
         const {password} = req.body
-        const {id} = req.user
+        const {id} = req.user.user
         const result = await authService.changpassword(id , password)
         res.json(result)
     }catch(e){
