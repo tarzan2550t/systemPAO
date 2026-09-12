@@ -12,12 +12,14 @@ const routes = [
   {
     path: '/register',
     name: 'register',
-    component: () => import('../views/Register.vue')
+    component: () => import('../views/Register.vue') ,
+    meta: { guest: true }
   },
   {
     path:'/first_login',
     name:'first_login',
-    component: ()=> import('../views/first_login.vue')
+    component: ()=> import('../views/first_login.vue') , 
+    meta: { guest: true }
   },
   {
     path:'/admin',
@@ -85,18 +87,10 @@ router.beforeEach(async (to)=>{
 
 
 export function redirectByRole(role, purpose) {
-  if (purpose === 'first_login') {
-    return { name: 'first_login' }
-  }
-  if (role === 'admin') {
-    return { name: 'admin_home' }
-  }
-  if (role === 'evaluatee') {
-    return { name: 'evaluatee_home' }
-  }
-  if (role === 'evaluator') {
-    return { name: 'evaluator_home' }
-  }
+  if (purpose === 'first_login') return { name: 'first_login' }
+  if (role === 'admin')  return { name: 'admin_home' } 
+  if (role === 'evaluatee') return { name: 'evaluatee_home' }
+  if (role === 'evaluator') return { name: 'evaluator_home' }
   return { name: 'login' }
 }
 
