@@ -21,3 +21,14 @@ export async function register(req ,res , next) {
         next(e)
     }
 }
+
+export async function changepassword(req,res,next){
+    try{
+        const {password} = req.body
+        const {id} = req.user
+        const result = await authService.changpassword(id , password)
+        res.json(result)
+    }catch(e){
+        next(e)
+    }
+}

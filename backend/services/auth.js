@@ -50,3 +50,11 @@ export async function login(email, password) {
 
     return { message: 'Login success', token,purpose}
 }
+
+export async function changpassword( id ,password){
+
+    const password_hash = await hashpassword(password)
+
+    const update = await conn('users').where({id}).update({password_hash , must_change_password : false })
+    return { message: 'ChangePassword success'}
+}
