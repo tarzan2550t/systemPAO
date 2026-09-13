@@ -32,13 +32,21 @@ const routes = [
       {
         path:'home',
         name:'admin_home',
-        component:() => import('../views/admin/Home.vue')
+        component:() => import('../views/admin/Home.vue'),
+        meta:{ role : 'admin' , title : 'จัดการผู้ใช้งาน' , showInSidebar : true }
       },
       {
         path:'about',
         name:'admin_about',
-        component:() => import('../views/admin/About.vue')
-      }
+        component:() => import('../views/admin/About.vue'),
+         meta:{ role : 'admin' , title : 'รอบการประเมิน' , showInSidebar : true }
+      },
+      {
+        path:'user',
+        name:'admin_user',
+        component:() => import('../views/admin/users.vue'),
+         meta:{ role : 'admin' , title : 'ผู้ใช้งาน' , showInSidebar : true }
+      },
     ]
   },
   {
@@ -73,32 +81,20 @@ const router = createRouter({
   history: createWebHistory(),
   routes
 })
+
 router.beforeEach(async (to) => {
   const auth = useAuthStore()
-  // console.log('--- ROUTER ---')
-  // console.log('to:', to.name)
-  // console.log('token:', auth.token)
-  // console.log('user:', auth.user)
-  // console.log('isLoggedIn:', auth.isLoggedIn)
-  // มี token แต่ยังไม่มี user → ดึง user จาก /me
+
   if (auth.token && !auth.user) {
     
     await auth.fetchMe()
   }
-  // console.log('--- ROUTER ---')
-  // console.log('to:', to.name)
-  // console.log('token:', auth.token)
-  // console.log('user:', auth.user)
-  // console.log('isLoggedIn:', auth.isLoggedIn)
-
   // ยังไม่ได้ login
 
   if (!auth.isLoggedIn) {
     if (to.meta.guest) {
-      
       return true
     }
-   
     return { name: 'login' }
   }
 
