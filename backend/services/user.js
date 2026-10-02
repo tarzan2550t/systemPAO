@@ -12,11 +12,11 @@ export async function getAllUsers() {
             'users.position',
             'users.department',
             'user_role.name as role'
-        ])
+        ]).where('users.id', '!=', 1) // Exclude the super admin user with id 1
     return users
 }
 
-export async function createUser(name, email, password, department, position) {
+export async function createUser(name, email, password, department , position) {
     if (!email || !name) {
         throw new AppError('Email and name are required.', 400)
     }
@@ -31,10 +31,9 @@ export async function createUser(name, email, password, department, position) {
         name,
         email,
         password_hash,
-        department,
-        position,
+        department: department ?? null,
+        position: position ?? null,
         role_id,
-        must_change_password: 1
     })
 
     return { success: true, message: 'User created successfully' }
