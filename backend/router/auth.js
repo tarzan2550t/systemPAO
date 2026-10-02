@@ -7,6 +7,6 @@ const router = express.Router()
 router.post('/register' , auth_controllers.register)
 router.post('/login' , auth_controllers.login)
 router.patch('/changepassword' , firstloginMiddleware , auth_controllers.changepassword )
-router.get('/me' , authMiddleware() , auth_controllers.me )
+// router.get('/me' , authMiddleware() , auth_controllers.me )
 
 export default router
