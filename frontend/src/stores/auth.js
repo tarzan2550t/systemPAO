@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import { jwtDecode } from 'jwt-decode'
 import api from '../api'
 
 export const useAuthStore = defineStore('auth' , ()=>{
@@ -26,12 +27,16 @@ export const useAuthStore = defineStore('auth' , ()=>{
     async function fetchMe() {
     if (!token.value) return 
         try {
-        const res = await api.get('/auth/me')
+        const payload = jwtDecode(token.value)
+        // console.log(payload)
         // console.log('ทำงาน')
-        // console.log(res)
-        user.value = res.user
-  
-        frist_login.value = res.purpose
+            if (payload.exp * 1000 > Date.now()) {
+                user.value = payload.user
+                frist_login.value = payload.purpose
+            } else {
+                // console.log('logout ทำงาน')
+                logout()
+            }        
         } catch {
         logout()
         }

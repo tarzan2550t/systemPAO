@@ -30,22 +30,28 @@ const routes = [
     meta:{role : 'admin'} , 
     children:[
       {
-        path:'home',
-        name:'admin_home',
-        component:() => import('../views/admin/Home.vue'),
-        meta:{ role : 'admin' , title : 'จัดการผู้ใช้งาน' , showInSidebar : true }
+        path:'dashboard',
+        name:'admin_Dashboard',
+        component:() => import('../views/admin/Dashboard.vue'),
+        meta:{ role : 'admin' , title : 'Dashboard' , showInSidebar : true }
       },
       {
-        path:'about',
-        name:'admin_about',
-        component:() => import('../views/admin/About.vue'),
+        path:'from',
+        name:'admin_Evaluation',
+        component:() => import('../views/admin/evaluation.vue'),
          meta:{ role : 'admin' , title : 'รอบการประเมิน' , showInSidebar : true }
       },
       {
-        path:'user',
-        name:'admin_user',
+        path:'users',
+        name:'admin_users',
         component:() => import('../views/admin/users.vue'),
          meta:{ role : 'admin' , title : 'ผู้ใช้งาน' , showInSidebar : true }
+      },
+      {
+        path:'adduser',
+        name:'admin_adduser',
+        component:() => import('../views/admin/adduser.vue'),
+         meta:{ role : 'admin' , }
       },
     ]
   },
@@ -86,7 +92,7 @@ router.beforeEach(async (to) => {
   const auth = useAuthStore()
 
   if (auth.token && !auth.user) {
-    
+    // console.log('ทำงาน function router check user')
     await auth.fetchMe()
   }
   // ยังไม่ได้ login
@@ -119,7 +125,7 @@ router.beforeEach(async (to) => {
 
 export function redirectByRole(role, purpose) {
   if (purpose === 'first_login') return { name: 'first_login' }
-  if (role === 'admin')  return { name: 'admin_home' } 
+  if (role === 'admin')  return { name: 'admin_Dashboard' } 
   if (role === 'evaluatee') return { name: 'evaluatee_home' }
   if (role === 'evaluator') return { name: 'evaluator_home' }
   return { name: 'login' }
