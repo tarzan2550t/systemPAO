@@ -16,7 +16,7 @@ export async function getAllUsers() {
     return users
 }
 
-export async function createUser(name, email, password, department , position) {
+export async function createUser(name, email, password, department , position , role_id) {
     if (!email || !name) {
         throw new AppError('Email and name are required.', 400)
     }

@@ -11,8 +11,8 @@ export async function getAllUsers(req, res, next) {
 
 export async function createUser(req, res, next) {
     try {
-        const { name, email, password, role, department, position } = req.body
-        const result = await userService.createUser(name, email, password, role, department, position)
+        const { name, email, password, role, department, position , role_id } = req.body
+        const result = await userService.createUser(name, email, password, department, position, role_id)
         res.json(result)
     } catch (e) {
         next(e)
